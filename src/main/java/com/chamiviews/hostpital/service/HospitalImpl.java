@@ -36,4 +36,16 @@ public class HospitalImpl implements HospitalService {
     public void delete(Long id) {
         hospitalRepository.delete(findById(id));
     }
+
+    @Override
+    public List<Hospital> findByName(String name) {
+       List<Hospital> hospitals= hospitalRepository.findByName("Asiri");
+       return  hospitals;
+    }
+
+    @Override
+    public List<Hospital> findByAddress(String address) {
+        List<Hospital> hospitals=hospitalRepository.findByAddress(address);
+        return hospitals;
+    }
 }

@@ -3,6 +3,7 @@ package com.chamiviews.hostpital.controller;
 import com.chamiviews.hostpital.model.Hospital;
 import com.chamiviews.hostpital.service.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,11 +18,14 @@ public class MasterController {
 
     @GetMapping(value = "/")
     public ModelAndView hello() {
-        ModelAndView mav = new ModelAndView("home");
+        ModelAndView mav = new ModelAndView("hospital");
 
-        List<Hospital> hospitals = hospitalService.findAll();
-
-        mav.addObject("hospitals", hospitals);
+//        List<Hospital> hospitals = hospitalService.findAll();
+//
+//        mav.addObject("hospitals", hospitals);
+        //hospitalService.findByName("Asiri");
+        Hospital hospital = new Hospital();
+        mav.addObject("hospital", hospital);
         return mav;
     }
 
@@ -34,7 +38,19 @@ public class MasterController {
 
     @PostMapping(value = "/hospital")
     public String save(@ModelAttribute("hospital") Hospital hospital) {
-        hospitalService.save(hospital);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        hospital.setName(encoder.encode(hospital.getName()));
+//        hospitalService.save(hospital);
+
+        List<Hospital> hospitals = hospitalService.findByAddress(hospital.getAddress());
+
+        if(hospitals.size()>0){
+            Hospital hospital1=hospitals.get(0);
+            if(encoder.matches(hospital.getName(),hospital1.getName())){
+                return "redirect:/";
+            }
+        }
+
         return "redirect:/";
     }
 

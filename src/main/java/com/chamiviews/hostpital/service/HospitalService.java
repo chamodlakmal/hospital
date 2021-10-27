@@ -14,4 +14,8 @@ public interface HospitalService {
 
     void delete(Long id);
 
+    List<Hospital> findByName(String name);
+
+    List<Hospital> findByAddress(String address);
+
 }
